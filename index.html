@@ -1,0 +1,940 @@
+<!DOCTYPE html> 
+<html lang="en" data-theme="blue"> 
+<head> 
+<meta charset="UTF-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+<title>Roland Jonn Rios Amangao | Interactive Deck</title> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /> 
+<link rel="preconnect" href="https://fonts.googleapis.com"> 
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet"> 
+<style> 
+:root { --font-main: 'Plus Jakarta Sans', sans-serif; --font-code: 'JetBrains Mono', monospace; --transition-speed: 0.4s; --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); } 
+html[data-theme="black"] { --bg-base: #010206; --bg-card: rgba(5, 11, 24, 0.88); --bg-card-hover: rgba(8, 18, 38, 0.95); --border-card: rgba(0, 242, 254, 0.42); --border-card-hover: rgba(0, 242, 254, 0.95); --text-main: #ffffff; --text-muted: #94b8db; --accent-primary: #00f2fe; --accent-secondary: #0088ff; --accent-purple: #9d4edd; --accent-glow: rgba(0, 242, 254, 0.5); --nav-bg: rgba(3, 7, 16, 0.96); --badge-bg: rgba(0, 242, 254, 0.18); --badge-text: #00f2fe; --badge-border: rgba(0, 242, 254, 0.6); } 
+html[data-theme="blue"] { --bg-base: #020819; --bg-card: rgba(8, 22, 54, 0.88); --bg-card-hover: rgba(12, 34, 78, 0.95); --border-card: rgba(56, 189, 248, 0.48); --border-card-hover: rgba(56, 189, 248, 0.95); --text-main: #ffffff; --text-muted: #b9e3fe; --accent-primary: #38bdf8; --accent-secondary: #0284c7; --accent-purple: #7c3aed; --accent-glow: rgba(56, 189, 248, 0.55); --nav-bg: rgba(4, 11, 28, 0.96); --badge-bg: rgba(56, 189, 248, 0.22); --badge-text: #38bdf8; --badge-border: rgba(56, 189, 248, 0.65); } 
+html[data-theme="light"] { --bg-base: #ffffff; --bg-card: #ffffff; --bg-card-hover: #ffffff; --border-card: #d1d5db; --border-card-hover: #9ca3af; --text-main: #111827; --text-muted: #374151; --accent-primary: #2563eb; --accent-secondary: #1d4ed8; --accent-purple: #4f46e5; --accent-glow: rgba(37, 99, 235, 0.14); --nav-bg: #ffffff; --badge-bg: #eff6ff; --badge-text: #1d4ed8; --badge-border: #bfdbfe; } 
+* { margin: 0; padding: 0; box-sizing: border-box; } 
+html, body { width: 100vw; height: 100vh; overflow: hidden !important; font-family: var(--font-main); background-color: var(--bg-base); color: var(--text-main); user-select: none; transition: background-color var(--transition-speed) ease; } 
+
+/* ================= KEYFRAMES ================= */
+@keyframes ambientBgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes floatSmooth {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(0.5deg); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 16px var(--accent-glow), inset 0 0 10px rgba(56, 189, 248, 0.1); }
+  50% { box-shadow: 0 0 35px var(--accent-primary), 0 0 15px var(--accent-purple), inset 0 0 20px rgba(56, 189, 248, 0.3); }
+}
+@keyframes slideItemRise {
+  0% { opacity: 0; transform: translateY(35px) scale(0.95); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes cardPop {
+  0% { opacity: 0; transform: translateY(30px) scale(0.85); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes pillPop {
+  0% { opacity: 0; transform: translateY(18px) scale(0.6); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes shimmerSweep {
+  0% { transform: translateX(-140%) skewX(-20deg); }
+  100% { transform: translateX(240%) skewX(-20deg); }
+}
+@keyframes cursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes rippleEffect {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes counterTick {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes orbDrift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(60px, -40px, 0) scale(1.15); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes logoPop {
+  0% { opacity: 0; transform: scale(0.3) rotate(-90deg); }
+  60% { opacity: 1; transform: scale(1.12) rotate(6deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes rippleOut {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+@keyframes chIn {
+  0% { opacity: 0; transform: translateY(28px) scale(0.8); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+html[data-theme="blue"] body { 
+  background-image: radial-gradient(circle at 50% -5%, rgba(56, 189, 248, 0.18) 0%, transparent 60%), radial-gradient(circle at 90% 90%, rgba(124, 58, 237, 0.16) 0%, transparent 55%), radial-gradient(circle at 10% 75%, rgba(2, 132, 199, 0.16) 0%, transparent 55%);
+  background-size: 160% 160%;
+  animation: ambientBgShift 15s ease infinite;
+} 
+
+/* ================= FLOATING BACKGROUND ORBS ================= */
+.bg-orbs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.38; will-change: transform; animation: orbDrift 18s ease-in-out infinite alternate; }
+.orb.o1 { width: 520px; height: 520px; left: -140px; top: -120px; background: var(--accent-primary); }
+.orb.o2 { width: 480px; height: 480px; right: -120px; bottom: -140px; background: var(--accent-purple); animation-duration: 22s; animation-delay: -6s; }
+.orb.o3 { width: 360px; height: 360px; left: 42%; top: 55%; background: var(--accent-secondary); opacity: 0.22; animation-duration: 26s; animation-delay: -12s; }
+html[data-theme="light"] .bg-orbs { display: none; }
+
+/* FIXED-SIZE STAGE: the whole deck is built at 1600x800 and scaled by JS,
+   so browser zoom (100% / 125% / 150%) never changes how it looks. */
+.deck-container { position: absolute; top: 0; left: 0; width: 1600px; height: 800px; transform-origin: top left; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; } 
+.header { height: 75px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; background: var(--nav-bg); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid rgba(56, 189, 248, 0.28); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45); flex-shrink: 0; transition: transform 0.9s var(--ease-out), opacity 0.9s ease; } 
+.brand { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; } 
+.brand-logo { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 1.4rem; animation: pulseGlow 3.5s ease-in-out infinite; transition: transform 0.4s var(--ease-spring); } 
+.brand:hover .brand-logo { transform: rotate(-12deg) scale(1.15); }
+.brand-text h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); } 
+.brand-text p { font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-code); font-weight: 600; } 
+.top-nav { display: flex; align-items: center; gap: 0.8rem; } 
+.top-nav-link { position: relative; overflow: hidden; background: rgba(56, 189, 248, 0.05); border: 2px solid rgba(56, 189, 248, 0.28); color: var(--text-muted); padding: 0.65rem 1.35rem; border-radius: 14px; font-family: var(--font-code); font-size: 1rem; font-weight: 900; cursor: pointer; letter-spacing: 0.05em; transition: all 0.4s var(--ease-out); } 
+.top-nav-link:hover { color: var(--text-main); background: rgba(56, 189, 248, 0.2); border-color: var(--accent-primary); box-shadow: 0 0 25px var(--accent-glow); transform: translateY(-3px) scale(1.02); } 
+.top-nav-link.active { color: #000; background: var(--accent-primary); border-color: var(--accent-primary); box-shadow: 0 0 30px var(--accent-glow); transform: translateY(-2px); } 
+
+/* ================= SLIDES (direction-aware transitions) ================= */
+.slides-wrapper { position: relative; flex: 1; min-height: 0; width: 100%; overflow: hidden; } 
+.slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 0.5rem 2rem; opacity: 0; visibility: hidden; transform: translateX(90px) scale(0.96); filter: blur(8px); transition: opacity 0.6s ease, transform 0.8s var(--ease-out), filter 0.6s ease, visibility 0.8s; display: flex; flex-direction: column; justify-content: center; overflow: hidden; } 
+.slide.before { transform: translateX(-90px) scale(0.96); }
+.slide.active { opacity: 1; visibility: visible; transform: translateX(0) scale(1); filter: blur(0); } 
+
+/* Staggered entrance for items (backwards fill keeps hover effects working afterwards) */
+.slide.active .anim-item { animation: slideItemRise 0.85s var(--ease-out) backwards; }
+.slide.active .anim-delay-1 { animation-delay: 0.10s; }
+.slide.active .anim-delay-2 { animation-delay: 0.20s; }
+.slide.active .anim-delay-3 { animation-delay: 0.30s; }
+.slide.active .anim-delay-4 { animation-delay: 0.40s; }
+.slide.active .anim-delay-5 { animation-delay: 0.50s; }
+
+/* Pop-in for pills, certificates and family cards */
+.slide.active .stat-pill { animation: pillPop 0.7s var(--ease-spring) backwards; }
+.slide.active .stat-pill:nth-child(1) { animation-delay: 0.55s; }
+.slide.active .stat-pill:nth-child(2) { animation-delay: 0.68s; }
+.slide.active .cert-thumb-card, .slide.active .family-member-card { animation: cardPop 0.7s var(--ease-spring) backwards; }
+.slide.active .academic-certs-grid .cert-thumb-card:nth-child(1) { animation-delay: 0.40s; }
+.slide.active .academic-certs-grid .cert-thumb-card:nth-child(2) { animation-delay: 0.48s; }
+.slide.active .academic-certs-grid .cert-thumb-card:nth-child(3) { animation-delay: 0.56s; }
+.slide.active .academic-certs-grid .cert-thumb-card:nth-child(4) { animation-delay: 0.64s; }
+.slide.active .esports-certs-grid .cert-thumb-card:nth-child(1) { animation-delay: 0.76s; }
+.slide.active .esports-certs-grid .cert-thumb-card:nth-child(2) { animation-delay: 0.84s; }
+.slide.active .family-grid .family-member-card:nth-child(1) { animation-delay: 0.30s; }
+.slide.active .family-grid .family-member-card:nth-child(2) { animation-delay: 0.40s; }
+.slide.active .family-grid .family-member-card:nth-child(3) { animation-delay: 0.50s; }
+.slide.active .family-grid .family-member-card:nth-child(4) { animation-delay: 0.60s; }
+
+.glass-card { position: relative; overflow: hidden; background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 2px solid var(--border-card); border-radius: 18px; padding: 0.75rem 1rem; box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5), 0 0 22px rgba(56, 189, 248, 0.12); transition: transform 0.4s var(--ease-out), border-color 0.4s ease, box-shadow 0.4s ease; } 
+.glass-card::after { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent); transform: translateX(-150%) skewX(-20deg); pointer-events: none; }
+.glass-card:hover::after { animation: shimmerSweep 1s var(--ease-out) forwards; }
+.glass-card:hover { transform: translateY(-5px); border-color: var(--border-card-hover); box-shadow: 0 20px 55px 0 rgba(0, 0, 0, 0.7), 0 0 45px var(--accent-glow); } 
+
+.slide-header { margin-bottom: 0.2rem; flex-shrink: 0; } 
+.slide-tag { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.85rem; border-radius: 20px; background: var(--badge-bg); border: 1.5px solid var(--badge-border); color: var(--badge-text); font-size: 0.78rem; font-weight: 800; font-family: var(--font-code); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.15rem; box-shadow: 0 0 14px var(--accent-glow); transition: transform 0.3s ease; } 
+.slide-tag:hover { transform: scale(1.05); }
+.slide-title { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; background: linear-gradient(135deg, var(--text-main) 30%, var(--accent-primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } 
+.slide-desc { color: var(--text-muted); font-size: 0.75rem; margin-top: 0.05rem; max-width: 900px; line-height: 1.2; font-weight: 500; } 
+
+.hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 460px); gap: 1.5rem; align-items: center; max-width: 1480px; margin: 0 auto; width: 100%; height: 100%; } 
+.hero-content { display: flex; flex-direction: column; justify-content: center; height: 100%; } 
+.hero-greeting { font-family: var(--font-code); color: var(--accent-primary); font-size: 1.35rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: 0.02em; } 
+.hero-greeting::after { content: '_'; display: inline-block; margin-left: 3px; animation: cursorBlink 1s infinite; }
+.hero-name { font-size: 3.2rem; font-weight: 900; line-height: 1.05; margin-bottom: 0.6rem; letter-spacing: -0.03em; } 
+.hero-name span { background: linear-gradient(120deg, var(--accent-primary), var(--accent-purple), var(--accent-primary)); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradientFlow 5s linear infinite; } 
+.intro-paragraph-box { margin-top: 0.6rem; padding: 1.1rem 1.3rem; border-left: 5px solid var(--accent-primary); background: rgba(56, 189, 248, 0.06); border-radius: 0 16px 16px 0; box-shadow: 0 0 25px rgba(56, 189, 248, 0.08), inset 0 0 20px rgba(56, 189, 248, 0.03); transition: transform 0.35s var(--ease-out), background 0.35s ease; } 
+.intro-paragraph-box:hover { transform: translateX(6px); background: rgba(56, 189, 248, 0.12); }
+.intro-paragraph-box p { font-size: 1.05rem; line-height: 1.6; color: var(--text-main); font-weight: 500; } 
+.intro-paragraph-box p strong { color: var(--accent-primary); font-weight: 800; text-shadow: 0 0 12px var(--accent-glow); } 
+.hero-stats { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.2rem; } 
+.stat-pill { display: flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.07); padding: 0.5rem 1rem; border-radius: 30px; border: 1.5px solid rgba(56, 189, 248, 0.32); box-shadow: 0 0 14px rgba(56, 189, 248, 0.1); font-size: 0.9rem; font-weight: 700; transition: transform 0.35s var(--ease-spring), border-color 0.35s ease, box-shadow 0.35s ease; } 
+.stat-pill:hover { transform: translateY(-4px) scale(1.04); border-color: var(--accent-primary); box-shadow: 0 0 26px var(--accent-glow); }
+.stat-pill i { color: var(--accent-primary); font-size: 1.1rem; filter: drop-shadow(0 0 8px var(--accent-primary)); } 
+
+.profile-card { text-align: center; position: relative; justify-self: center; align-self: center; width: 100%; max-width: 450px; margin: 0 auto; } 
+/* entrance first, then gentle floating forever */
+.slide.active .profile-card.anim-item { animation: slideItemRise 0.85s var(--ease-out) backwards, floatSmooth 6s ease-in-out infinite; animation-delay: 0.3s, 1.3s; }
+/* FULL-BODY PORTRAIT FRAME: taller, portrait-shaped frame so the whole figure (head to shoes) is visible */
+.profile-avatar-wrapper { position: relative; top: 0; left: 0; width: min(100%, 390px); height: 515px; margin: 0 auto 0.7rem; border-radius: 28px; padding: 8px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple)); box-shadow: 0 12px 48px rgba(0, 0, 0, 0.45), 0 0 55px var(--accent-glow); transition: transform 0.5s var(--ease-out), box-shadow 0.5s ease; cursor: pointer; will-change: transform, box-shadow; } 
+.profile-avatar-wrapper:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 22px 70px rgba(0, 0, 0, 0.65), 0 0 85px var(--accent-glow); } 
+.profile-img-container { width: 100%; height: 100%; border-radius: 22px; overflow: hidden; background: #ffffff; display: flex; align-items: center; justify-content: center; position: relative; isolation: isolate; -webkit-mask-image: -webkit-radial-gradient(white, black); transform: translateZ(0); } 
+.profile-img-container::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 80%, rgba(0, 0, 0, 0.12) 100%); opacity: 0.6; transition: opacity 0.45s ease; pointer-events: none; z-index: 1; } 
+.profile-avatar-wrapper:hover .profile-img-container::before { opacity: 0.1; } 
+/* cover + centered keeps the full figure in frame; hover zoom is gentle so head and shoes are never cut off */
+.profile-img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; image-rendering: auto; transform: translate3d(0, 0, 0) scale(1); transition: transform 0.7s cubic-bezier(0.2, 0.75, 0.25, 1), filter 0.5s ease; will-change: transform; backface-visibility: hidden; -webkit-backface-visibility: hidden; } 
+.profile-avatar-wrapper:hover .profile-img { transform: scale(1.02); filter: brightness(1.03) contrast(1.03); } 
+.img-zoom-hint { position: absolute; top: 10px; right: 10px; background: rgba(8, 12, 22, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(56, 189, 248, 0.5); color: var(--accent-primary); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; opacity: 0.85; transform: scale(0.95); transition: all 0.35s var(--ease-out); z-index: 2; pointer-events: none; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5); } 
+.profile-avatar-wrapper:hover .img-zoom-hint, .cert-thumb-card:hover .img-zoom-hint, .grad-portrait-card-solo:hover .img-zoom-hint, .family-member-card:hover .img-zoom-hint { opacity: 1; transform: scale(1.12); background: var(--accent-primary); color: #000; box-shadow: 0 0 18px var(--accent-primary); } 
+/* Small school-emblem badge pinned to the photo corner (original design, ~46px) */
+.profile-monogram-fallback { font-size: 6rem; font-weight: 900; color: var(--accent-primary); display: none; }
+/* SMALL SCHOOL LOGO BADGE: sits on the side of the profile frame (kept small on purpose) */
+.school-logo-badge { position: absolute; top: 16px; left: 16px; width: 60px; height: 60px; border-radius: 50%; background: #ffffff; border: 3px solid var(--accent-primary); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 22px var(--accent-glow); display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 3; cursor: pointer; transition: transform 0.4s var(--ease-spring), box-shadow 0.4s ease; }
+.school-logo-badge:hover { transform: scale(1.14) rotate(-4deg); box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6), 0 0 34px var(--accent-primary); }
+.school-logo-badge img { width: 100%; height: 100%; object-fit: contain; padding: 5px; display: block; }
+.school-logo-fallback { display: none; color: #0284c7; font-size: 1.6rem; }
+.profile-role { font-weight: 800; font-size: 1.45rem; color: var(--text-main); } 
+.profile-subtext { font-size: 0.98rem; color: var(--text-muted); margin-top: 0.2rem; font-weight: 600; } 
+
+.personal-profile-slide { justify-content: center; gap: 0.65rem; padding-top: 0.8rem; padding-bottom: 0.8rem; overflow-y: hidden !important; } 
+.personal-profile-slide .slide-header { margin-bottom: 0.35rem; max-width: 1380px; width: 100%; margin-left: auto; margin-right: auto; } 
+.personal-profile-slide .slide-title { font-size: 2.25rem; }
+.personal-profile-slide .slide-desc { font-size: 1.02rem; }
+.personal-profile-content { width: 100%; max-width: 1380px; margin: 0 auto; min-height: 0; } 
+.personal-profile-slide .personal-info-panel { padding: 1.35rem 1.75rem; background: rgba(7, 15, 35, 0.96); border: 2px solid rgba(56, 189, 248, 0.6); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 28px rgba(56, 189, 248, 0.14); border-radius: 22px; transition: border-color 0.4s ease, box-shadow 0.4s ease; } 
+.personal-profile-slide .personal-info-panel:hover { border-color: var(--accent-primary); box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55), 0 0 40px var(--accent-glow); }
+.slide2-custom-layout { display: flex; flex-direction: column; gap: 0.85rem; } 
+.slide2-summary-box { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--accent-primary); padding: 0.95rem 1.25rem; border-radius: 0 14px 14px 0; transition: transform 0.35s ease, background 0.35s ease; } 
+.slide2-summary-box:hover { transform: translateX(6px); background: rgba(56, 189, 248, 0.16); }
+.slide2-summary-box p { font-size: 1.08rem; line-height: 1.52; color: var(--text-main); font-weight: 500; } 
+.slide2-section-title { font-size: 1.12rem; font-weight: 900; color: var(--accent-primary); margin-bottom: 0.4rem; font-family: var(--font-code); text-transform: uppercase; letter-spacing: 0.05em; } 
+.slide2-list { list-style: none; display: flex; flex-direction: column; gap: 0.38rem; margin-bottom: 0.2rem; } 
+.slide2-list li { position: relative; padding-left: 1.35rem; font-size: 1.04rem; line-height: 1.42; color: #f1f5f9; font-weight: 500; transition: transform 0.3s var(--ease-out), color 0.3s ease; } 
+.slide2-list li:hover { transform: translateX(6px); color: #ffffff; }
+.slide2-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent-primary); font-weight: 900; font-size: 1.1rem; } 
+.slide2-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem; } 
+.slide2-grid-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+
+.mini-section-title { font-size: 0.76rem; font-weight: 800; color: var(--accent-primary); margin-bottom: 0.15rem; font-family: var(--font-code); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.3rem; }
+.honor-badge-compact { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(121, 40, 202, 0.1)); border: 1px solid var(--border-card-hover); border-radius: 8px; margin-bottom: 0.2rem; transition: transform 0.35s var(--ease-out), border-color 0.35s ease, box-shadow 0.35s ease; }
+.honor-badge-compact:hover { transform: translateX(4px); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--accent-glow); }
+.honor-icon-small { font-size: 1.05rem; color: #fbbf24; flex-shrink: 0; }
+.honor-text-small h3 { font-size: 0.8rem; font-weight: 800; color: var(--text-main); line-height: 1.1; }
+.honor-text-small p { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; }
+
+.grad-portrait-card-solo { position: relative; border-radius: 12px; overflow: hidden; border: 2px solid var(--accent-primary); box-shadow: 0 0 18px var(--accent-glow); cursor: pointer; background: #080f24; width: 100%; flex: 1; min-height: 335px; transition: transform 0.4s var(--ease-out), box-shadow 0.4s ease; }
+.grad-portrait-card-solo:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 32px var(--accent-glow); }
+.grad-portrait-card-solo img { width: 100%; height: 100%; object-fit: cover; object-position: center 12%; transition: transform 0.6s var(--ease-out); }
+.grad-portrait-card-solo:hover img { transform: scale(1.06); }
+.grad-portrait-badge-large { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(2, 8, 25, 0.96) 65%, transparent); padding: 0.45rem 0.35rem 0.3rem; text-align: center; font-size: 0.75rem; font-weight: 900; color: var(--accent-primary); font-family: var(--font-code); letter-spacing: 0.04em; }
+
+.achievements-right-stack { display: flex; flex-direction: column; justify-content: space-between; height: 100%; gap: 0.25rem; }
+.academic-certs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem; }
+.esports-certs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem; }
+.cert-thumb-card { position: relative; display: flex; flex-direction: column; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--border-card-hover); background: #050b1a; cursor: pointer; transition: all 0.35s var(--ease-out); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4); }
+.cert-thumb-card:hover { transform: translateY(-3px) scale(1.02); border-color: var(--accent-primary); box-shadow: 0 10px 24px var(--accent-glow); }
+.cert-img-stage { position: relative; width: 100%; height: 138px; background: #040916; display: flex; align-items: center; justify-content: center; padding: 3px; overflow: hidden; }
+.cert-img-stage img { width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 4px; transition: transform 0.5s var(--ease-out); }
+.cert-thumb-card:hover .cert-img-stage img { transform: scale(1.07); }
+.cert-thumb-label { background: rgba(8, 20, 48, 0.98); border-top: 1px solid rgba(56, 189, 248, 0.25); padding: 0.3rem 0.5rem; font-size: 0.75rem; font-weight: 800; color: #ffffff; line-height: 1.15; display: flex; align-items: center; justify-content: space-between; gap: 0.25rem; }
+.cert-thumb-label span { color: var(--accent-primary); font-size: 0.62rem; font-family: var(--font-code); font-weight: 800; white-space: nowrap; }
+.achievement-fallback-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.72rem; font-family: var(--font-code); background: rgba(8, 15, 36, 0.9); text-align: center; padding: 0.2rem; } 
+.achievement-fallback-text i { font-size: 0.95rem; color: var(--accent-primary); margin-bottom: 0.1rem; } 
+
+.hs-grid { display: grid; grid-template-columns: 320px 1fr; gap: 1rem; max-width: 1320px; margin: 0 auto; width: 100%; align-items: stretch; } 
+.slide .hs-grid > .glass-card { padding: 0.6rem 0.9rem; border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between; } 
+
+/* ================= MEDIUM-SIZE FOOTER ================= */
+.footer { position: relative; height: 56px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; background: var(--nav-bg); backdrop-filter: blur(18px); border-top: 1px solid rgba(56, 189, 248, 0.28); box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.4); flex-shrink: 0; transition: transform 0.9s var(--ease-out), opacity 0.9s ease; } 
+.progress-track { position: absolute; top: -1px; left: 0; right: 0; height: 3px; background: rgba(56, 189, 248, 0.12); }
+.progress-bar { height: 100%; width: 25%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-purple)); box-shadow: 0 0 12px var(--accent-glow); border-radius: 0 3px 3px 0; transition: width 0.8s var(--ease-out); }
+.counter { font-family: var(--font-code); font-size: 0.95rem; color: var(--text-muted); font-weight: 800; } 
+.counter.tick { animation: counterTick 0.5s var(--ease-out); }
+.nav-dots { display: flex; align-items: center; gap: 0.65rem; } 
+.dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(150, 150, 150, 0.35); cursor: pointer; border: none; transition: all 0.5s var(--ease-spring); } 
+.dot:hover { background: rgba(56, 189, 248, 0.8); transform: scale(1.3); box-shadow: 0 0 12px var(--accent-primary); }
+.dot.active { background: var(--accent-primary); width: 28px; border-radius: 14px; box-shadow: 0 0 14px var(--accent-primary); animation: rippleEffect 2s infinite ease-in-out; } 
+.nav-controls-right { display: flex; align-items: center; gap: 0.75rem; } 
+.nav-btn-big { background: rgba(56, 189, 248, 0.08); border: 2px solid var(--accent-primary); color: var(--text-main); padding: 0.4rem 1.2rem; border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 16px var(--accent-glow); transition: all 0.35s var(--ease-out); letter-spacing: 0.03em; } 
+.nav-btn-big i { transition: transform 0.3s var(--ease-out); }
+#prevBtn:hover:not(:disabled) i { transform: translateX(-4px); }
+#nextBtn:hover:not(:disabled) i { transform: translateX(4px); }
+.nav-btn-big:hover:not(:disabled) { background: var(--accent-primary); color: #000; box-shadow: 0 0 28px var(--accent-glow), 0 0 10px #fff; transform: translateY(-2px) scale(1.02); } 
+.nav-btn-big:active:not(:disabled) { transform: translateY(1px) scale(0.97); }
+.nav-btn-big:disabled { opacity: 0.25; border-color: rgba(150, 150, 150, 0.2); cursor: not-allowed; box-shadow: none; } 
+
+/* Header & footer slide in once the intro finishes; slide content waits for it too */
+.deck-container.pre-intro .header { transform: translateY(-100%); opacity: 0; }
+.deck-container.pre-intro .footer { transform: translateY(100%); opacity: 0; }
+.deck-container.pre-intro .slide .anim-item { animation: none !important; opacity: 0; }
+.deck-container.pre-intro .slide .stat-pill { animation: none !important; opacity: 0; }
+
+.toast { position: fixed; bottom: 85px; right: 2.5rem; background: var(--accent-primary); color: #000; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 800; font-size: 1rem; opacity: 0; transform: translateY(100px); transition: all 0.4s var(--ease-out); z-index: 99; } 
+.toast.show { transform: translateY(0); opacity: 1; } 
+
+.lightbox-modal { position: fixed; inset: 0; z-index: 9999; background: rgba(4, 6, 12, 0.92); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.45s var(--ease-out), visibility 0.45s var(--ease-out); } 
+.lightbox-modal.active { opacity: 1; visibility: visible; pointer-events: auto; } 
+.lightbox-content-box { position: relative; max-width: 920px; width: 92vw; background: var(--bg-card); border: 2px solid var(--border-card-hover); border-radius: 24px; padding: 1.4rem; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 60px var(--accent-glow); display: flex; flex-direction: column; align-items: center; transform: scale(0.85) translateY(30px); transition: transform 0.5s var(--ease-spring); } 
+.lightbox-modal.active .lightbox-content-box { transform: scale(1) translateY(0); } 
+.lightbox-img-wrapper { width: 100%; max-height: 66vh; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 16px; background: #060912; box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.6); } 
+.lightbox-img { max-width: 100%; max-height: 66vh; object-fit: contain; border-radius: 14px; display: block; transition: transform 0.4s ease; } 
+.lightbox-info { width: 100%; margin-top: 1rem; text-align: center; } 
+.lightbox-title { font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.3rem; } 
+.lightbox-caption { font-size: 0.94rem; color: var(--text-muted); line-height: 1.45; max-width: 740px; margin: 0 auto; font-weight: 500; } 
+.lightbox-close { position: absolute; top: -16px; right: -16px; width: 42px; height: 42px; border-radius: 50%; background: var(--accent-primary); color: #000; border: 2px solid #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-glow); transition: transform 0.35s var(--ease-out), background 0.35s ease; z-index: 10; } 
+.lightbox-close:hover { transform: scale(1.2) rotate(90deg); background: #fff; color: #000; } 
+
+html[data-theme="light"] body, html[data-theme="light"] .deck-container, html[data-theme="light"] .slides-wrapper, html[data-theme="light"] .slide, html[data-theme="light"] .header, html[data-theme="light"] .footer { background-color: #ffffff; background-image: none; } 
+html[data-theme="light"] .glass-card { background: #ffffff; box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06); } 
+html[data-theme="light"] .profile-img-container, html[data-theme="light"] .lightbox-img-wrapper { background: #f3f4f6; } 
+
+/* FAMILY SLIDE: now 4 balanced cards (grandparents removed) */
+.family-slide { gap: 0.75rem; padding-top: 0.9rem; padding-bottom: 0.9rem; }
+.family-grid { width: 100%; max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.1rem; align-items: stretch; }
+.family-member-card { position: relative; display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; background: var(--bg-card); border: 2px solid var(--border-card-hover); cursor: pointer; transition: all 0.35s var(--ease-out); box-shadow: 0 8px 26px rgba(0,0,0,0.4); }
+.family-member-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--accent-primary); box-shadow: 0 18px 42px var(--accent-glow); }
+.family-member-img-stage { position: relative; width: 100%; height: 270px; background: #060912; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 4px; }
+.family-member-img-stage img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; transition: transform 0.5s ease; }
+.family-member-card:hover .family-member-img-stage img { transform: scale(1.07); }
+.family-fallback-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.75rem; font-family: var(--font-code); background: rgba(8, 15, 36, 0.95); text-align: center; padding: 0.5rem; }
+.family-fallback-text i { font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 0.35rem; }
+.family-member-info { padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; background: rgba(8, 18, 42, 0.96); border-top: 1px solid rgba(56, 189, 248, 0.22); flex: 1; }
+.family-member-info h3 { font-size: 1.05rem; font-weight: 800; color: var(--accent-primary); font-family: var(--font-code); }
+.family-member-info p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.38; font-weight: 500; }
+
+/* SAFETY NET: if a slide is ever taller than the stage, shrink just that slide */
+.fit-inner { width: 100%; display: flex; flex-direction: column; gap: 0.65rem; flex-shrink: 0; }
+.slide:not(.personal-profile-slide) > .fit-inner { gap: 0; }
+
+/* ================= INTRO SCREEN ================= */
+.intro { position: fixed; inset: 0; z-index: 10000; overflow: hidden; cursor: pointer; }
+.intro.gone { display: none; }
+.intro-panel { position: absolute; top: 0; height: 100%; width: 50.2%; background-color: var(--bg-base); background-image: linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px); background-size: 56px 56px; transition: transform 0.95s cubic-bezier(0.77, 0, 0.18, 1); will-change: transform; }
+.intro-panel.left { left: 0; background-position: right top; }
+.intro-panel.right { right: 0; background-position: left top; }
+.intro.opening .intro-panel.left { transform: translateX(-101%); }
+.intro.opening .intro-panel.right { transform: translateX(101%); }
+.intro-seam { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: linear-gradient(transparent, var(--accent-primary), transparent); box-shadow: 0 0 26px var(--accent-glow); opacity: 0; transform: scaleY(0); transition: opacity 0.35s ease, transform 0.55s var(--ease-out); z-index: 2; }
+.intro.leaving .intro-seam { opacity: 1; transform: scaleY(1); }
+.intro.opening .intro-seam { opacity: 0; }
+.intro-stage { position: absolute; top: 0; left: 0; width: 1600px; height: 800px; transform-origin: top left; z-index: 3; pointer-events: none; }
+.intro-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.55s ease, transform 0.7s var(--ease-out), filter 0.55s ease; }
+.intro.leaving .intro-content { opacity: 0; transform: scale(1.1) translateY(-18px); filter: blur(6px); }
+.intro-glow { position: absolute; width: 640px; height: 640px; border-radius: 50%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%); opacity: 0.45; filter: blur(30px); animation: rippleEffect 3s ease-in-out infinite; }
+.intro-logo-wrap { position: relative; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+.intro-ring { position: absolute; inset: -10px; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0 55%, var(--accent-primary), var(--accent-purple)); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px)); mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px)); animation: spin 1.6s linear infinite; }
+.intro-ripple { position: absolute; inset: 9px; border-radius: 24px; border: 2px solid var(--accent-primary); opacity: 0; animation: rippleOut 2.4s ease-out infinite; }
+.intro-ripple.r2 { animation-delay: 1.2s; }
+.intro-logo { position: relative; width: 92px; height: 92px; border-radius: 24px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 3rem; opacity: 0; animation: logoPop 0.95s var(--ease-out) 0.15s forwards, pulseGlow 3s ease-in-out 1.2s infinite; }
+.intro-name { font-size: 2.5rem; font-weight: 900; letter-spacing: 0.08em; color: var(--text-main); text-shadow: 0 0 28px var(--accent-glow); text-align: center; perspective: 600px; }
+.intro-name .ch { display: inline-block; opacity: 0; animation: chIn 0.75s var(--ease-out) forwards; animation-delay: calc(0.75s + var(--i) * 0.035s); }
+.intro-sub { margin-top: 0.8rem; font-family: var(--font-code); font-size: 0.95rem; font-weight: 800; letter-spacing: 0.22em; color: var(--accent-primary); opacity: 0; animation: fadeUp 0.8s var(--ease-out) 1.55s forwards; }
+.intro-loader { margin-top: 2.2rem; width: 380px; opacity: 0; animation: fadeUp 0.8s var(--ease-out) 0.5s forwards; }
+.intro-bar { width: 100%; height: 5px; border-radius: 5px; background: rgba(56, 189, 248, 0.15); overflow: hidden; }
+.intro-bar-fill { height: 100%; width: 0%; border-radius: 5px; background: linear-gradient(90deg, var(--accent-primary), var(--accent-purple)); box-shadow: 0 0 16px var(--accent-glow); }
+.intro-meta { margin-top: 0.6rem; display: flex; justify-content: space-between; font-family: var(--font-code); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.12em; color: var(--text-muted); }
+.intro-skip { position: absolute; bottom: 38px; font-family: var(--font-code); font-size: 0.72rem; letter-spacing: 0.14em; color: var(--text-muted); opacity: 0; animation: fadeUp 0.8s ease 2s forwards; }
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; animation-delay: 0s !important; }
+}
+</style> 
+</head> 
+<body> 
+
+<!-- Floating background orbs -->
+<div class="bg-orbs" aria-hidden="true">
+  <span class="orb o1"></span>
+  <span class="orb o2"></span>
+  <span class="orb o3"></span>
+</div>
+
+<div class="deck-container pre-intro" id="deck"> 
+  <header class="header"> 
+    <div class="brand" onclick="goToSlide(0)" title="Return to Homepage"> 
+      <div class="brand-logo">R</div> 
+      <div class="brand-text"> 
+        <h1>Roland Jonn Rios Amangao</h1> 
+        <p>UC BSIT Student</p> 
+      </div> 
+    </div> 
+    <nav class="top-nav"> 
+      <button class="top-nav-link active" onclick="goToSlide(0)">HOMEPAGE</button> 
+      <button class="top-nav-link" onclick="goToSlide(1)">PERSONAL INFORMATION</button> 
+      <button class="top-nav-link" onclick="goToSlide(2)">ACHIEVEMENTS</button>
+      <button class="top-nav-link" onclick="goToSlide(3)">FAMILY & FRIENDS</button> 
+    </nav> 
+  </header> 
+
+  <main class="slides-wrapper"> 
+    <!-- Slide 1: Homepage -->
+    <div class="slide active"> 
+      <div class="hero-layout"> 
+        <div class="hero-content"> 
+          <div class="slide-tag anim-item anim-delay-1"><i class="fas fa-terminal"></i> STUDENT PORTFOLIO DECK</div> 
+          <div class="hero-greeting anim-item anim-delay-2">// Hello World, I'm</div> 
+          <h2 class="hero-name anim-item anim-delay-2">Roland Jonn <span>Rios Amangao</span></h2> 
+          <div class="intro-paragraph-box anim-item anim-delay-3"> 
+            <p> 
+              Welcome to my interactive portfolio! I am a first-year <strong>Information Technology</strong> student at the <strong>University of the Cordilleras</strong> in Baguio City. Originally from Looc, Romblon, I am passionate about technology—especially <strong>cybersecurity</strong>, <strong>software engineering</strong>, and <strong>web development</strong>. Feel free to explore this presentation deck to learn more about my background, academic journey, technical skills, and family! 
+            </p> 
+          </div> 
+          <div class="hero-stats anim-item anim-delay-4"> 
+            <div class="stat-pill"> 
+              <i class="fas fa-university"></i> <span>University of the Cordilleras</span>
+            </div> 
+            <div class="stat-pill"> 
+              <i class="fas fa-graduation-cap"></i> <span>BSIT First-Year Student</span>
+            </div> 
+          </div> 
+        </div> 
+        <div class="profile-card anim-item anim-delay-3"> 
+          <div class="glass-card"> 
+            <!-- Full-body profile photo: save your full-body shot as profile.jpg next to this file -->
+            <div class="profile-avatar-wrapper" onclick="openLightbox('profile.jpg', 'Roland Jonn Rios Amangao', 'BSIT Student • University of the Cordilleras')" title="Click to view full size"> 
+              <div class="profile-img-container"> 
+                <img src="profile.jpg" alt="Roland Jonn Rios Amangao - full body photo" class="profile-img" onerror="handleImageError(this, 'profileFallback')" /> 
+                <div class="profile-monogram-fallback" id="profileFallback">RA</div> 
+              </div> 
+              <div class="img-zoom-hint" title="Click to view larger"><i class="fas fa-search-plus"></i></div>
+              <!-- School logo: save your logo as school-logo.jpg next to this file -->
+              <div class="school-logo-badge" onclick="event.stopPropagation(); openLightbox('school-logo.jpg', 'University of the Cordilleras', 'School logo')" title="University of the Cordilleras">
+                <img src="school-logo.jpg" alt="School logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                <i class="fas fa-university school-logo-fallback"></i>
+              </div>
+            </div>
+            <h3 class="profile-role">Roland Jonn R. Amangao</h3> 
+            <p class="profile-subtext">Information Technology Student</p> 
+          </div> 
+        </div> 
+      </div> 
+    </div> 
+
+    <!-- Slide 2: Personal Information -->
+    <div class="slide personal-profile-slide fit-slide"> 
+      <div class="slide-header anim-item anim-delay-1"> 
+        <div class="slide-tag"><i class="fas fa-user"></i> ABOUT ME</div> 
+        <h2 class="slide-title">Personal Information</h2> 
+        <p class="slide-desc">My background, technical focus, and personal profile.</p> 
+      </div> 
+      <div class="personal-profile-content anim-item anim-delay-2"> 
+        <section class="personal-info-panel" aria-label="Personal Information"> 
+          <div class="slide2-custom-layout"> 
+            <div class="slide2-summary-box anim-item anim-delay-2"> 
+              <p> 
+                I am <strong>Roland Jonn Rios Amangao</strong>, an 18-year-old first-year BSIT student at the <strong>University of the Cordilleras</strong> in Baguio City, originally from Looc, Romblon. Driven by a passion for cybersecurity and software engineering, I am honing my technical skills in Python, Java, web development, discrete math, and AI integration. Guided by my Roman Catholic faith, I complement my academic focus with an active lifestyle—enjoying competitive gaming, basketball, exploring local spots, and connecting with friends. 
+              </p> 
+            </div> 
+            <div class="slide2-grid-2 anim-item anim-delay-3"> 
+              <div> 
+                <div class="slide2-section-title">Education & Background</div> 
+                <ul class="slide2-list"> 
+                  <li>First-year BSIT student at the University of the Cordilleras.</li> 
+                  <li>Originally from Looc, Romblon; studying in Baguio City.</li> 
+                  <li>Looc National High School graduate (92% with Honors).</li> 
+                  <li>Raised on his mother's side of the family.</li> 
+                </ul> 
+              </div> 
+              <div> 
+                <div class="slide2-section-title">Technical Interests</div> 
+                <ul class="slide2-list"> 
+                  <li>Cybersecurity, ethical hacking, and cloud engineering</li> 
+                  <li>Software engineering and discrete mathematics</li> 
+                  <li>Interactive web development (HTML, CSS, JS)</li> 
+                  <li>Python, Java, Linux, and AI integration</li> 
+                </ul> 
+              </div> 
+            </div> 
+            <div class="slide2-grid-bottom anim-item anim-delay-4"> 
+              <div> 
+                <div class="slide2-section-title">Personal Details</div> 
+                <ul class="slide2-list" style="margin-bottom: 0;"> 
+                  <li><strong>Birthday:</strong> April 1, 2008 (18 years old)</li> 
+                  <li><strong>Location:</strong> Baguio City, Cordillera Administrative Region</li> 
+                  <li><strong>Email:</strong> <a href="mailto:rolandjonnamangao@gmail.com" style="color: var(--accent-primary); text-decoration: underline;">rolandjonnamangao@gmail.com</a></li> 
+                  <li><strong>Faith:</strong> Roman Catholic</li> 
+                </ul> 
+              </div> 
+              <div> 
+                <div class="slide2-section-title">Hobbies & Lifestyle</div> 
+                <ul class="slide2-list" style="margin-bottom: 0;"> 
+                  <li>Competitive Call of Duty: Mobile & esports tournaments</li> 
+                  <li>Playing competitive basketball</li> 
+                  <li>Exploring local food spots and hanging out with friends</li> 
+                </ul> 
+              </div> 
+            </div> 
+          </div> 
+        </section> 
+      </div> 
+    </div> 
+
+    <!-- Slide 3: Achievements -->
+    <div class="slide fit-slide"> 
+      <div class="slide-header anim-item anim-delay-1" style="max-width: 1320px; width: 100%; margin: 0 auto 0.25rem;"> 
+        <div class="slide-tag"><i class="fas fa-trophy"></i> HONORS & COMPETITIONS</div> 
+        <h2 class="slide-title">Achievements</h2> 
+        <p class="slide-desc">Click any certificate or photo to zoom in full screen.</p> 
+      </div> 
+      <div class="hs-grid"> 
+        <!-- Left Box: Larger Portrait SHS Graduate Portrait -->
+        <div class="glass-card anim-item anim-delay-2"> 
+          <div style="display: flex; flex-direction: column; height: 100%;">
+            <div class="mini-section-title"><i class="fas fa-graduation-cap"></i> Senior High Graduate</div>
+            <div class="honor-badge-compact"> 
+              <i class="fas fa-medal honor-icon-small"></i> 
+              <div class="honor-text-small"> 
+                <h3>Looc National High School</h3> 
+                <p>92% Average with Honors • HUMSS</p> 
+              </div> 
+            </div> 
+            <div class="grad-portrait-card-solo" onclick="openLightbox('graduation-photo.jpg', 'Senior High School Graduation Portrait', 'Graduated from Looc National High School (HUMSS) with Academic Honors.')" title="Click to view full graduation photo">
+              <img src="graduation-photo.jpg" alt="Graduation Photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+              <div class="achievement-fallback-text" style="display:none;">
+                <i class="fas fa-user-graduate"></i>
+                <span>graduation-photo.jpg</span>
+              </div>
+              <div class="grad-portrait-badge-large">SHS GRADUATE • 92% HONORS</div>
+              <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+            </div>
+          </div>
+        </div> 
+
+        <!-- Right Box: Tall Vertical Portrait Certificates -->
+        <div class="glass-card anim-item anim-delay-3"> 
+          <div class="achievements-right-stack">
+            <!-- Section 1: Academic Honors (2x2 Grid) -->
+            <div>
+              <div class="mini-section-title"><i class="fas fa-award"></i> Academic Honors & Attendance</div>
+              <div class="academic-certs-grid">
+                <!-- Cert 1: Grade 10 Q3 Honors -->
+                <div class="cert-thumb-card" onclick="openLightbox('grade10-honors-q3.jpg', 'Grade 10 Academic Achiever (91% Average)', 'Certificate of Recognition — 3rd Quarter, SY 2023-2024 (SPA Grade 10 - Lino Brocka), Looc National High School.')" title="Click to zoom certificate">
+                  <div class="cert-img-stage">
+                    <img src="grade10-honors-q3.jpg" alt="Grade 10 Honors" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="achievement-fallback-text" style="display:none;"><span>grade10-honors-q3.jpg</span></div>
+                    <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+                  </div>
+                  <div class="cert-thumb-label">
+                    <strong>91% Achiever</strong>
+                    <span>G10 • Q3</span>
+                  </div>
+                </div>
+                <!-- Cert 2: Grade 12 Q1 Honors -->
+                <div class="cert-thumb-card" onclick="openLightbox('grade12-honors-q1.jpg', 'Grade 12 Class Honor (90% Average)', 'Certificate of Recognition — 1st Quarter, SY 2025-2026, Looc National High School.')" title="Click to zoom certificate">
+                  <div class="cert-img-stage">
+                    <img src="grade12-honors-q1.jpg" alt="Grade 12 Q1 Honors" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="achievement-fallback-text" style="display:none;"><span>grade12-honors-q1.jpg</span></div>
+                    <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+                  </div>
+                  <div class="cert-thumb-label">
+                    <strong>90% Honor</strong>
+                    <span>G12 • Q1</span>
+                  </div>
+                </div>
+                <!-- Cert 3: Grade 12 Q1 Attendance -->
+                <div class="cert-thumb-card" onclick="openLightbox('grade12-attendance-q1.jpg', 'Complete Attendance Award (1st Quarter)', 'Senior High School Complete Attendance Award — 1st Quarter, SY 2025-2026 (HUMSS Karl Marx).')" title="Click to zoom certificate">
+                  <div class="cert-img-stage">
+                    <img src="grade12-attendance-q1.jpg" alt="Grade 12 Q1 Attendance" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="achievement-fallback-text" style="display:none;"><span>grade12-attendance-q1.jpg</span></div>
+                    <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+                  </div>
+                  <div class="cert-thumb-label">
+                    <strong>Attendance</strong>
+                    <span>G12 • Q1</span>
+                  </div>
+                </div>
+                <!-- Cert 4: Grade 12 Q2 Honors & Attendance -->
+                <div class="cert-thumb-card" onclick="openLightbox('grade12-honors-attendance-q2.jpg', 'Grade 12 Academic Achiever (90%) & Complete Attendance', 'Certificate of Recognition (90% Average) & Complete Attendance Award — 2nd Quarter (First Semester), SY 2025-2026.')" title="Click to zoom certificates">
+                  <div class="cert-img-stage">
+                    <img src="grade12-honors-attendance-q2.jpg" alt="Grade 12 Q2 Honors and Attendance" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="achievement-fallback-text" style="display:none;"><span>grade12-honors-attendance-q2.jpg</span></div>
+                    <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+                  </div>
+                  <div class="cert-thumb-label">
+                    <strong>Achiever & Att.</strong>
+                    <span>G12 • Q2</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 2: Esports Tournaments (1x2 Grid) -->
+            <div>
+              <div class="mini-section-title"><i class="fas fa-gamepad"></i> Esports Tournaments</div>
+              <div class="esports-certs-grid">
+                <!-- Cert 5: CODM Tournament -->
+                <div class="cert-thumb-card" onclick="openLightbox('codm-pobsiklaban-2024.jpg', '2nd Place – Call of Duty Tournament (Pobsiklaban 2024)', 'Certificate of Achievement & Medal awarded at Poblacion Covered Court, Barangay Poblacion, Looc, Romblon (December 2024).')" title="Click to zoom CODM certificate">
+                  <div class="cert-img-stage">
+                    <img src="codm-pobsiklaban-2024.jpg" alt="CODM Pobsiklaban 2024" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="achievement-fallback-text" style="display:none;"><span>codm-pobsiklaban-2024.jpg</span></div>
+                    <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+                  </div>
+                  <div class="cert-thumb-label">
+                    <strong>2nd Place CODM</strong>
+                    <span>2024</span>
+                  </div>
+                </div>
+                <!-- Cert 6: Mobile Legends Tournament -->
+                <div class="cert-thumb-card" onclick="openLightbox('ml-tournament.jpg', 'Mobile Legends Tournament Achievement', 'Competitive gaming achievement and participation in Mobile Legends tournaments.')" title="Click to zoom ML certificate">
+                  <div class="cert-img-stage">
+                    <img src="ml-tournament.jpg" alt="Mobile Legends Tournament" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="achievement-fallback-text" style="display:none;"><span>ml-tournament.jpg</span></div>
+                    <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+                  </div>
+                  <div class="cert-thumb-label">
+                    <strong>ML Tournament</strong>
+                    <span>ESPORTS</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div> 
+    </div> 
+  
+    <!-- Slide 4: Family & Friends (4-card grid; grandparents removed) -->
+    <div class="slide family-slide">
+      <div class="slide-header anim-item anim-delay-1" style="max-width: 1300px; width: 100%; margin: 0 auto 0.3rem;">
+        <div class="slide-tag"><i class="fas fa-users"></i> THE PEOPLE IN MY LIFE</div>
+        <h2 class="slide-title">Family & Friends</h2>
+        <p class="slide-desc">The pillars of support, family background, and close bonds behind my journey. Click any photo to view full screen.</p>
+      </div>
+
+      <div class="family-grid anim-item anim-delay-2">
+        <!-- 1. Mom -->
+        <div class="family-member-card" onclick="openLightbox('mom-photo.jpg', 'Mom', 'My mother who worked abroad, maintaining a long-distance connection and supporting our family.')" title="Click to view mom photo">
+          <div class="family-member-img-stage">
+            <img src="mom-photo.jpg" alt="Mom" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="family-fallback-text" style="display:none;">
+              <i class="fas fa-user-nurse"></i>
+              <span>mom-photo.jpg</span>
+            </div>
+            <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+          </div>
+          <div class="family-member-info">
+            <h3>Mom</h3>
+            <p>Maintains a loving long-distance connection while working abroad to support our family.</p>
+          </div>
+        </div>
+
+        <!-- 2. Dad -->
+        <div class="family-member-card" onclick="openLightbox('dad-photo.jpg', 'Dad', 'Family background and paternal roots.')" title="Click to view dad photo">
+          <div class="family-member-img-stage">
+            <img src="dad-photo.jpg" alt="Dad" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="family-fallback-text" style="display:none;">
+              <i class="fas fa-user-tie"></i>
+              <span>dad-photo.jpg</span>
+            </div>
+            <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+          </div>
+          <div class="family-member-info">
+            <h3>Dad</h3>
+            <p>An important part of my background and family heritage.</p>
+          </div>
+        </div>
+
+        <!-- 3. Siblings -->
+        <div class="family-member-card" onclick="openLightbox('siblings-photo.jpg', 'Siblings', 'My siblings (Kate, Karl, and Princess), who I grew up alongside.')" title="Click to view siblings photo">
+          <div class="family-member-img-stage">
+            <img src="siblings-photo.jpg" alt="Siblings" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="family-fallback-text" style="display:none;">
+              <i class="fas fa-child"></i>
+              <span>siblings-photo.jpg</span>
+            </div>
+            <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+          </div>
+          <div class="family-member-info">
+            <h3>Siblings</h3>
+            <p>Growing up together with my siblings, Kate, Karl, and Princess.</p>
+          </div>
+        </div>
+
+        <!-- 4. Friends -->
+        <div class="family-member-card" onclick="openLightbox('friends-photo.jpg', 'Friends', 'My close friends and companions exploring local food spots, hanging out, and having fun together.')" title="Click to view friends photo">
+          <div class="family-member-img-stage">
+            <img src="friends-photo.jpg" alt="Friends" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="family-fallback-text" style="display:none;">
+              <i class="fas fa-user-friends"></i>
+              <span>friends-photo.jpg</span>
+            </div>
+            <div class="img-zoom-hint"><i class="fas fa-search-plus"></i></div>
+          </div>
+          <div class="family-member-info">
+            <h3>Friends</h3>
+            <p>Great company for exploring local food spots, hanging out, and having fun together.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main> 
+
+  <footer class="footer"> 
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="counter" id="slideCounter">01 / 04</div> 
+    <div class="nav-dots" id="navDots"> 
+      <button class="dot active" onclick="goToSlide(0)" title="HOMEPAGE"></button> 
+      <button class="dot" onclick="goToSlide(1)" title="PERSONAL INFORMATION"></button> 
+      <button class="dot" onclick="goToSlide(2)" title="ACHIEVEMENTS"></button>
+      <button class="dot" onclick="goToSlide(3)" title="FAMILY & FRIENDS"></button> 
+    </div> 
+    <div class="nav-controls-right"> 
+      <button class="nav-btn-big" id="prevBtn" onclick="prevSlide()" disabled> 
+        <i class="fas fa-arrow-left"></i> PREV 
+      </button> 
+      <button class="nav-btn-big" id="nextBtn" onclick="nextSlide()"> 
+        NEXT <i class="fas fa-arrow-right"></i> 
+      </button> 
+    </div> 
+  </footer> 
+</div> 
+
+<div class="toast" id="toast">Message sent successfully!</div> 
+<div class="lightbox-modal" id="lightboxModal" onclick="handleLightboxBackdropClick(event)"> 
+  <div class="lightbox-content-box"> 
+    <button class="lightbox-close" onclick="closeLightbox()" title="Close (Esc)"><i class="fas fa-times"></i></button> 
+    <div class="lightbox-img-wrapper"> 
+      <img src="" alt="Enlarged View" class="lightbox-img" id="lightboxImg" /> 
+    </div> 
+    <div class="lightbox-info"> 
+      <h3 class="lightbox-title" id="lightboxTitle"></h3> 
+      <p class="lightbox-caption" id="lightboxCaption"></p> 
+    </div> 
+  </div> 
+</div> 
+
+<!-- INTRO SCREEN -->
+<div class="intro" id="intro">
+  <div class="intro-panel left"></div>
+  <div class="intro-panel right"></div>
+  <div class="intro-seam"></div>
+  <div class="intro-stage" id="introStage">
+    <div class="intro-content">
+      <div class="intro-glow"></div>
+      <div class="intro-logo-wrap">
+        <span class="intro-ripple"></span>
+        <span class="intro-ripple r2"></span>
+        <div class="intro-ring"></div>
+        <div class="intro-logo">R</div>
+      </div>
+      <h1 class="intro-name" id="introName" aria-label="Roland Jonn Rios Amangao">ROLAND JONN RIOS AMANGAO</h1>
+      <p class="intro-sub">UC BSIT STUDENT • INTERACTIVE PORTFOLIO</p>
+      <div class="intro-loader">
+        <div class="intro-bar"><div class="intro-bar-fill" id="introBar"></div></div>
+        <div class="intro-meta"><span id="introStatus">LOADING PORTFOLIO</span><span id="introPct">0%</span></div>
+      </div>
+      <p class="intro-skip">CLICK OR PRESS ANY KEY TO SKIP</p>
+    </div>
+  </div>
+</div>
+
+<script> 
+let introActive = true;
+let currentSlide = 0; 
+const slides = document.querySelectorAll('.slide'); 
+const totalSlides = slides.length; 
+const prevBtn = document.getElementById('prevBtn'); 
+const nextBtn = document.getElementById('nextBtn'); 
+const dots = document.querySelectorAll('.dot'); 
+const topNavLinks = document.querySelectorAll('.top-nav-link'); 
+const counter = document.getElementById('slideCounter'); 
+const progressBar = document.getElementById('progressBar');
+
+function updateDeck() { 
+  slides.forEach((slide, idx) => { 
+    slide.classList.toggle('active', idx === currentSlide); 
+    slide.classList.toggle('before', idx < currentSlide); /* slides to the left exit/enter from the left */
+  }); 
+  dots.forEach((dot, idx) => { 
+    dot.classList.toggle('active', idx === currentSlide); 
+  }); 
+  topNavLinks.forEach((link, idx) => { 
+    link.classList.toggle('active', idx === currentSlide); 
+  }); 
+  prevBtn.disabled = (currentSlide === 0); 
+  nextBtn.disabled = (currentSlide === totalSlides - 1); 
+  counter.textContent = `0${currentSlide + 1} / 0${totalSlides}`; 
+  counter.classList.remove('tick'); void counter.offsetWidth; counter.classList.add('tick');
+  progressBar.style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+} 
+
+function nextSlide() { 
+  if (introActive) return;
+  if (currentSlide < totalSlides - 1) { 
+    currentSlide++; 
+    updateDeck(); 
+  } 
+} 
+
+function prevSlide() { 
+  if (introActive) return;
+  if (currentSlide > 0) { 
+    currentSlide--; 
+    updateDeck(); 
+  } 
+} 
+
+function goToSlide(index) { 
+  if (introActive) return;
+  if (index === currentSlide) return;
+  currentSlide = index; 
+  updateDeck(); 
+} 
+
+window.addEventListener('keydown', (e) => { 
+  if (introActive) { exitIntro(); return; }
+  if (e.key === 'Escape') { 
+    closeLightbox(); 
+    return; 
+  } 
+  const modal = document.getElementById('lightboxModal'); 
+  if (modal && modal.classList.contains('active')) { 
+    return; 
+  } 
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { 
+    nextSlide(); 
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { 
+    prevSlide(); 
+  } 
+}); 
+
+let touchStartX = 0; 
+let touchEndX = 0; 
+
+window.addEventListener('touchstart', (e) => { 
+  touchStartX = e.changedTouches[0].screenX; 
+}); 
+
+window.addEventListener('touchend', (e) => { 
+  touchEndX = e.changedTouches[0].screenX; 
+  if (touchStartX - touchEndX > 50) nextSlide(); 
+  if (touchEndX - touchStartX > 50) prevSlide(); 
+}); 
+
+function handleImageError(imgElement, fallbackId) { 
+  imgElement.style.display = 'none'; 
+  const fallback = document.getElementById(fallbackId); 
+  if (fallback) fallback.style.display = 'block'; 
+} 
+
+function openLightbox(imgSrc, title, caption) { 
+  const modal = document.getElementById('lightboxModal'); 
+  const modalImg = document.getElementById('lightboxImg'); 
+  const modalTitle = document.getElementById('lightboxTitle'); 
+  const modalCaption = document.getElementById('lightboxCaption'); 
+  modalImg.src = imgSrc; 
+  modalTitle.textContent = title; 
+  modalCaption.textContent = caption; 
+  modal.classList.add('active'); 
+} 
+
+function closeLightbox() { 
+  const modal = document.getElementById('lightboxModal'); 
+  if (modal) modal.classList.remove('active'); 
+} 
+
+function handleLightboxBackdropClick(e) { 
+  if (e.target.id === 'lightboxModal') { 
+    closeLightbox(); 
+  } 
+} 
+
+/* ===== FIXED STAGE SCALING =====
+   The deck (and intro) are laid out at REF_W x REF_H and scaled to fit the window.
+   Browser zoom (100% / 125% / 150%) only changes the window size in CSS px,
+   so the scale compensates and everything looks identical every time. */
+const REF_W = 1600;
+const REF_H = 800;
+const deck = document.getElementById('deck');
+const introStage = document.getElementById('introStage');
+
+function fitStage() {
+  const s = Math.min(window.innerWidth / REF_W, window.innerHeight / REF_H);
+  const left = ((window.innerWidth - REF_W * s) / 2) + 'px';
+  const top = ((window.innerHeight - REF_H * s) / 2) + 'px';
+  [deck, introStage].forEach(el => {
+    el.style.transform = 'scale(' + s + ')';
+    el.style.left = left;
+    el.style.top = top;
+  });
+}
+
+/* Safety net: only shrinks a slide if its content is taller than the stage. */
+const fitSlides = document.querySelectorAll('.fit-slide');
+fitSlides.forEach(s => {
+  const wrap = document.createElement('div');
+  wrap.className = 'fit-inner';
+  while (s.firstChild) wrap.appendChild(s.firstChild);
+  s.appendChild(wrap);
+});
+
+function fitAll() {
+  fitSlides.forEach(s => {
+    const inner = s.querySelector('.fit-inner');
+    inner.style.zoom = 1;
+    const cs = getComputedStyle(s);
+    const avail = s.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    const need = inner.offsetHeight;
+    inner.style.zoom = need > avail ? Math.max(0.4, (avail / need) * 0.98) : 1;
+  });
+}
+
+function refreshLayout() { fitStage(); fitAll(); }
+
+window.addEventListener('resize', refreshLayout);
+window.addEventListener('load', refreshLayout);
+if (document.fonts) document.fonts.ready.then(refreshLayout);
+refreshLayout();
+updateDeck();
+
+/* ===== INTRO SEQUENCE ===== */
+const intro = document.getElementById('intro');
+const introBar = document.getElementById('introBar');
+const introPct = document.getElementById('introPct');
+const introStatus = document.getElementById('introStatus');
+const introName = document.getElementById('introName');
+
+/* split the name into letters so each one animates in */
+(function splitName() {
+  const text = introName.textContent.trim();
+  introName.textContent = '';
+  [...text].forEach((c, i) => {
+    const s = document.createElement('span');
+    s.className = 'ch';
+    s.style.setProperty('--i', i);
+    s.textContent = c === ' ' ? '\u00A0' : c;
+    introName.appendChild(s);
+  });
+})();
+
+function exitIntro() {
+  if (!introActive) return;
+  introActive = false;
+  intro.classList.add('leaving');                                   /* content fades, seam glows */
+  setTimeout(() => intro.classList.add('opening'), 450);            /* panels split open */
+  setTimeout(() => deck.classList.remove('pre-intro'), 800);        /* header, footer & slide 1 animate in */
+  setTimeout(() => intro.classList.add('gone'), 1700);              /* remove overlay */
+}
+
+function startIntroProgress() {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dur = reduce ? 600 : 2600;
+  const t0 = performance.now();
+  function tick(now) {
+    if (!introActive) return;
+    const p = Math.min((now - t0) / dur, 1);
+    const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    const pct = Math.round(e * 100);
+    introBar.style.width = pct + '%';
+    introPct.textContent = pct + '%';
+    introStatus.textContent = pct < 40 ? 'LOADING PORTFOLIO' : pct < 75 ? 'PREPARING ASSETS' : pct < 100 ? 'ALMOST READY' : 'READY';
+    if (p < 1) requestAnimationFrame(tick);
+    else setTimeout(exitIntro, 450);
+  }
+  requestAnimationFrame(tick);
+}
+
+intro.addEventListener('click', exitIntro);
+startIntroProgress();
+</script> 
+</body> 
+</html>
